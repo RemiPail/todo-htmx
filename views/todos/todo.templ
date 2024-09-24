@@ -1,0 +1,23 @@
+package todos
+
+import (
+	"fmt"
+	"github.com/RemiPail/todo-htmx/models"
+)
+
+templ TodoComponent(todo models.Todo) {
+	<li class="flex items-center gap-4 w-full border border-gray-400 rounded-lg p-2" id={ fmt.Sprintf("todo-%d", todo.ID) }>
+		<input 
+            type="checkbox" 
+            class="h-6 w-6 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" 
+            checked?={ todo.Done }
+            hx-put={fmt.Sprintf("/api/todos/%d", todo.ID)}
+            hx-target={fmt.Sprintf("#todo-%d", todo.ID)}
+			hx-swap="outerHTML"
+        />
+		<span class="flex-grow">
+			{ todo.Title }
+		</span>
+		<button class="bg-red-500 hover:bg-red-700 focus:ring-red-500 text-white font-bold py-1 px-2 rounded" hx-delete={fmt.Sprintf("/api/todos/%d", todo.ID)} hx-target={fmt.Sprintf("#todo-%d", todo.ID)} hx-swap="outerHTML">Delete</button>
+	</li>
+}

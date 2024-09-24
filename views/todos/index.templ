@@ -1,0 +1,33 @@
+package todos
+
+import (
+	"github.com/RemiPail/todo-htmx/models"
+	"github.com/RemiPail/todo-htmx/views/layouts"
+)
+
+templ Index(todos []models.Todo) {
+	@layouts.Base() {
+		<div class="flex flex-col items-center justify-center gap-4 py-20 w-full max-w-md m-auto">
+			<h1 class="text-3xl text-blue-500 font-bold">
+				Todos
+			</h1>
+			<form hx-post="/api/todos" hx-target="#todos" hx-swap="beforeend" hx-indicator="#spinner" class="flex items-center gap-4 w-full">
+        		<input name="title" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " placeholder="Créer un nouveau todo" required />
+				<img id="spinner" class="htmx-indicator w-8 h-8" src="/public/img/bars.svg"/>
+			</form>
+			<div class="flex flex-col gap-4 w-full">
+				<ul id="todos" class="flex flex-col gap-4">
+					if len(todos) == 0 {
+						<p class="text-lg text-gray-500">
+							Aucun todo à afficher
+						</p>
+					} else {
+						for _, todo := range todos {
+							@TodoComponent(todo)
+						}
+					}
+				</ul>
+			</div>
+		</div>
+	}
+}
